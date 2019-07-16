@@ -31,6 +31,7 @@ class Double_List {
 
         int insert(const T& a);
         int remove(const T& a);
+        int reverse_order();
         void dump();
 
     private:
@@ -59,7 +60,7 @@ Double_List<T> :: ~Double_List() {
 
 template<typename T>
 int Double_List<T> :: insert(const T& a) {
-    cout << "inserting " << a << endl;
+    cout << "Double list, inserting " << a << endl;
     Node * p;
     try {
         p = new Node(a);    
@@ -67,7 +68,7 @@ int Double_List<T> :: insert(const T& a) {
         cout << "in Double list insert function:" << e.what() << endl;
         return -1;
     }
-    if(head->next) {    //这里容易忘记有四个指针要修改
+    if(head->next) {    //这里容易忘记有四个指针要修改, 注意p有两个指针被赋值，并且要用p赋值给其他两个指针
         Node * q = head->next;
         q->pre = p;
         head->next = p;
@@ -86,7 +87,7 @@ int Double_List<T> :: insert(const T& a) {
 
 template<typename T>
 int Double_List<T> :: remove(const T& a) {
-    cout << "removing " << a << endl;
+    cout << "Double list, removing " << a << endl;
     Node *p = head->next;
     Node *q = head;
     while(p && p->data != a) {
@@ -98,20 +99,38 @@ int Double_List<T> :: remove(const T& a) {
         q->next->pre = q;
         delete p;
     } else {
-        cout << a << " is not found" << endl;
+        cout << "Double list, " << a << " is not found" << endl;
         return -1;
     }
     return 0;
 }
 
 template<typename T>
+int Double_List<T> :: reverse_order() {
+    Node *p = head->next;
+    Node *q = nullptr;
+    head->next = nullptr;
+    while(p) {
+        q = p->next;
+        if(head->next) head->next->pre = p; //这里容易漏掉，注意p有两个指针被赋值，并且要用p赋值给其他两个指针
+        p->next = head->next;
+        p->pre = head;
+        head->next = p;
+        p = q;
+    }
+
+    cout << "Double list, list order is reversed" << endl;
+    return 0;
+}
+
+template<typename T>
 void Double_List<T> :: dump() {
     if(!head->next){
-        cout << "List is empty" << endl;
+        cout << "Double list, List is empty" << endl;
         return;
     }
 
-    cout << "List element: ";
+    cout << "Double list, List element: ";
     Node *p = head->next;
     Node *q = head;
     while(p) {
@@ -121,7 +140,7 @@ void Double_List<T> :: dump() {
     }
     cout << endl;
 
-    cout << "List element: ";
+    cout << "Double list, List element: ";
     while(q != head) {
         cout << q->data << " ";
         q = q->pre;

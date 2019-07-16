@@ -30,6 +30,7 @@ class Circular_List {
 
         int insert(const T& a);
         int remove(const T& a);
+        int reverse_order();
         void dump();
 
     private:
@@ -59,7 +60,7 @@ Circular_List<T> :: ~Circular_List() {
 
 template<typename T>
 int Circular_List<T> :: insert(const T& a) {
-    cout << "inserting " << a << endl;
+    cout << "Circular list, inserting " << a << endl;
     Node * p;
     try {
         p = new Node(a);    
@@ -74,7 +75,7 @@ int Circular_List<T> :: insert(const T& a) {
 
 template<typename T>
 int Circular_List<T> :: remove(const T& a) {
-    cout << "removing " << a << endl;
+    cout << "Circular list, removing " << a << endl;
     Node *p = head->next;
     Node *q = head;
     while(p != head && p->data != a) {
@@ -85,20 +86,37 @@ int Circular_List<T> :: remove(const T& a) {
         q->next = p->next;
         delete p;
     } else {
-        cout << a << " is not found" << endl;
+        cout << "Circular list, " << a << " is not found" << endl;
         return -1;
     }
     return 0;
 }
 
 template<typename T>
+int Circular_List<T> :: reverse_order() {
+    Node *p = head->next;
+    Node *q = nullptr;
+    head->next = head;
+    while(p != head) {
+        q = p->next;
+        p->next = head->next;
+        head->next = p;
+        p = q;
+    }
+
+    cout << "Circular list, list order is reversed" << endl;
+    return 0;
+}
+
+
+template<typename T>
 void Circular_List<T> :: dump() {
     if(head->next == head){
-        cout << "List is empty" << endl;
+        cout << "Circular list, List is empty" << endl;
         return;
     }
 
-    cout << "List element: ";
+    cout << "Circular list, List element: ";
     Node *p = head->next;
     while(p != head) {
         cout << p->data << " ";
