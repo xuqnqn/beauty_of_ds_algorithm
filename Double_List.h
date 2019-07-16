@@ -31,8 +31,9 @@ class Double_List {
 
         int insert(const T& a);
         int remove(const T& a);
+        int merge(const Double_List & a);
         int reverse_order();
-        void dump();
+        void dump() const;
 
     private:
         Node * head; 
@@ -129,6 +130,41 @@ int Double_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
+int Double_List<T> :: merge(const Double_List & a) {
+    cout << "Double list, merging list: ";
+    a.dump();
+
+    Node * p = a.head->next;
+    Node * q = head->next;
+    Node * r = head;
+
+    while(p && q) {
+        if(q->data > p->data) {
+            Node * m = new Node(p->data);
+            m->next = q;
+            m->pre = r;
+            r->next = m;
+            q->pre = m;
+            r = m;
+            p = p->next;
+        } else {
+            r = q;
+            q = q->next;
+        }
+    }
+
+    while(p) {
+        Node * m = new Node(p->data);
+        m->pre = r;
+        r->next = m;
+        r = r->next;
+        p = p->next;
+    }
+
+    return 0;
+}
+
+template<typename T>
 int Double_List<T> :: reverse_order() {
     Node *p = head->next;
     Node *q = nullptr;
@@ -147,7 +183,7 @@ int Double_List<T> :: reverse_order() {
 }
 
 template<typename T>
-void Double_List<T> :: dump() {
+void Double_List<T> :: dump() const {
     if(!head->next){
         cout << "Double list, List is empty" << endl;
         return;

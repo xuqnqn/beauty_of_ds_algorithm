@@ -30,8 +30,9 @@ class Circular_List {
 
         int insert(const T& a);
         int remove(const T& a);
+        int merge(const Circular_List & a);
         int reverse_order();
-        void dump();
+        void dump() const;
 
     private:
         Node * head; 
@@ -112,6 +113,39 @@ int Circular_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
+int Circular_List<T> :: merge(const Circular_List & a) {
+    cout << "Circular list, merging list: ";
+    a.dump();
+
+    Node * p = a.head->next;
+    Node * q = head->next;
+    Node * r = head;
+
+    while(p != a.head && q != head) {
+        if(q->data > p->data) {
+            Node * m = new Node(p->data);
+            m->next = q;
+            r->next = m;
+            r = m;
+            p = p->next;
+        } else {
+            r = q;
+            q = q->next;
+        }
+    }
+
+    while(p != a.head) {
+        Node * m = new Node(p->data);
+        r->next = m;
+        r = r->next;
+        p = p->next;
+    }
+    r->next = head;
+
+    return 0;
+}
+
+template<typename T>
 int Circular_List<T> :: reverse_order() {
     Node *p = head->next;
     Node *q = nullptr;
@@ -129,7 +163,7 @@ int Circular_List<T> :: reverse_order() {
 
 
 template<typename T>
-void Circular_List<T> :: dump() {
+void Circular_List<T> :: dump() const {
     if(head->next == head){
         cout << "Circular list, List is empty" << endl;
         return;
