@@ -68,8 +68,27 @@ int Circular_List<T> :: insert(const T& a) {
         cout << "in Circular list insert function:" << e.what() << endl;
         return -1;
     }
+
+#if 0   //Always insert a new Node at list head
     p->next = head->next;
     head->next = p;
+#else   //keep list in ascending order when insert a new Node
+    Node *q = head->next;
+    Node *r = head;
+    while(q != head) {
+        if(q->data > p->data) {
+            p->next = q;
+            r->next = p;
+            return 0;
+        } else {
+            r = q;
+        }
+        q = q->next;
+    }
+    p->next = q;
+    r->next = p;
+#endif    
+
     return 0;
 }
 

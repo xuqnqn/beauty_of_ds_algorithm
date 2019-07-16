@@ -68,6 +68,8 @@ int Double_List<T> :: insert(const T& a) {
         cout << "in Double list insert function:" << e.what() << endl;
         return -1;
     }
+
+#if 0   //Always insert a new Node at list head
     if(head->next) {    //这里容易忘记有四个指针要修改, 注意p有两个指针被赋值，并且要用p赋值给其他两个指针
         Node * q = head->next;
         q->pre = p;
@@ -81,6 +83,25 @@ int Double_List<T> :: insert(const T& a) {
         p->next = nullptr;
         p->pre = head;
     }
+#else   //keep list in ascending order when insert a new Node
+    Node *q = head->next;
+    Node *r = head;
+    while(q) {
+        if(q->data > p->data) {
+            p->next = q;
+            p->pre  = r;
+            q->pre  = p;
+            r->next = p;
+            return 0;
+        } else {
+            r = q;
+            q = q->next;
+        }
+    }
+    p->next = q;
+    p->pre  = r;
+    r->next = p;
+#endif
 
     return 0;
 }
@@ -96,7 +117,9 @@ int Double_List<T> :: remove(const T& a) {
     }
     if(p && p->data == a) {
         q->next = p->next;
-        q->next->pre = q;
+        if(q->next) {   //删除最后一个节点容易出错
+            q->next->pre = q;   //不要想当然q->next一定有->pre
+        } 
         delete p;
     } else {
         cout << "Double list, " << a << " is not found" << endl;
