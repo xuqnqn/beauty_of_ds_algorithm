@@ -1,25 +1,25 @@
 /*************************************************************************
-      > File Name: Single_List.h
+      > File Name: Circular_List.h
       > Author: Xu Qingqing
       > Mail: xuqnqn@qq.com
-      > Created Time: Tue 16 Jul 2019 07:36:51 AM CST
+      > Created Time: Tue 16 Jul 2019 09:20:02 PM CST
  ************************************************************************/
 
-#ifndef _SINGLE_LIST_H
-#define _SINGLE_LIST_H
+#ifndef _CIRCULAR_LIST_H
+#define _CIRCULAR_LIST_H
 
 #include <iostream>
 
 using namespace std;
 
-//带头节点的单链表，比不带头节点的实现简单
+//带头节点的循环链表，比不带头节点的实现简单
 template <typename T>
-class Single_List {
+class Circular_List {
     public:
-        Single_List();
-        ~Single_List();
-        Single_List(const Single_List & l) = delete;
-        Single_List & operator = (const Single_List & l) = delete;
+        Circular_List();
+        ~Circular_List();
+        Circular_List(const Circular_List & l) = delete;
+        Circular_List & operator = (const Circular_List & l) = delete;
 
         struct Node {
             Node(const T& a) : data(a), next(nullptr) {}
@@ -37,18 +37,19 @@ class Single_List {
 };
 
 template<typename T>
-Single_List<T> :: Single_List() {
+Circular_List<T> :: Circular_List() {
     try {
         head = new Node;
+        head->next = head;
     } catch (exception &e) {
-        cout << "in Single list constructor: " << e.what() << endl;
+        cout << "in Circular list constructor: " << e.what() << endl;
     }
 }
 
 template<typename T>
-Single_List<T> :: ~Single_List() {
+Circular_List<T> :: ~Circular_List() {
     Node * p;
-    while(head->next) {
+    while(head->next != head) {
         p = head->next;
         head->next = head->next->next;
         delete p;
@@ -57,13 +58,13 @@ Single_List<T> :: ~Single_List() {
 }
 
 template<typename T>
-int Single_List<T> :: insert(const T& a) {
+int Circular_List<T> :: insert(const T& a) {
     cout << "inserting " << a << endl;
     Node * p;
     try {
         p = new Node(a);    
     } catch (exception &e) {
-        cout << "in Single list insert function:" << e.what() << endl;
+        cout << "in Circular list insert function:" << e.what() << endl;
         return -1;
     }
     p->next = head->next;
@@ -72,15 +73,15 @@ int Single_List<T> :: insert(const T& a) {
 }
 
 template<typename T>
-int Single_List<T> :: remove(const T& a) {
+int Circular_List<T> :: remove(const T& a) {
     cout << "removing " << a << endl;
     Node *p = head->next;
     Node *q = head;
-    while(p && p->data != a) {
+    while(p != head && p->data != a) {
         q = p;
         p = p->next;
     }
-    if(p && p->data == a) {
+    if(p != head && p->data == a) {
         q->next = p->next;
         delete p;
     } else {
@@ -91,21 +92,23 @@ int Single_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
-void Single_List<T> :: dump() {
-    if(!head->next){
+void Circular_List<T> :: dump() {
+    if(head->next == head){
         cout << "List is empty" << endl;
         return;
     }
 
     cout << "List element: ";
     Node *p = head->next;
-    while(p) {
+    while(p != head) {
         cout << p->data << " ";
         p = p->next;
     }
     cout << endl;
     return;
 }
+
+
 
 
 #endif
