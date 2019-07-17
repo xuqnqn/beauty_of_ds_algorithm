@@ -32,6 +32,8 @@ class Single_List {
         int remove(const T& a);
         int merge(const Single_List & a);
         int reverse_order();
+        void clear();
+        void show_middle_node() const;
         void dump() const;  //定义为const 函数，这样const形参对象，就可以调用这个const 函数了
 
     private:
@@ -111,6 +113,20 @@ int Single_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
+void Single_List<T> :: clear() {
+    cout << "Single list, clearing" << endl;
+    Node *p = head->next;
+    head->next = nullptr;
+    while(p) {
+        Node *q = p->next;
+        delete p;
+        p = q;
+    }
+
+    return;
+}
+
+template<typename T>
 int Single_List<T> :: merge(const Single_List & a) {
     cout << "Single list, merging list: ";
     a.dump();
@@ -156,6 +172,34 @@ int Single_List<T> :: reverse_order() {
 
     cout << "Single list, list order is reversed" << endl;
     return 0;
+}
+
+template<typename T>
+void Single_List<T> :: show_middle_node() const {
+    cout << "Single list, middle node: ";
+    if(!head->next) {
+        cout << "NULL" << endl;
+        return;
+    }
+
+    if(!head->next->next) {
+        cout << head->next->data << endl;
+        return;
+    } 
+
+    Node *p = head->next;
+    Node *q = head->next->next; 
+    while(q && q->next) {
+        p = p->next;
+        q = q->next->next;
+    }
+    if(!q) {   //此处，如果在大脑中不好想明白，在纸上画个图就清楚了
+        cout << p->data << endl;
+    } else {
+        cout << p->data << " "<< p->next->data << endl;
+    }
+
+    return;
 }
 
 template<typename T>

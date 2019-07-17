@@ -32,6 +32,8 @@ class Circular_List {
         int remove(const T& a);
         int merge(const Circular_List & a);
         int reverse_order();
+        void clear();
+        void show_middle_node() const;
         void dump() const;
 
     private:
@@ -113,6 +115,20 @@ int Circular_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
+void Circular_List<T> :: clear() {
+    cout << "Circular list, clearing" << endl;
+    Node *p = head->next;
+    head->next = head;
+    while(p != head) {
+        Node *q = p->next;
+        delete p;
+        p = q;
+    }
+
+    return;
+}
+
+template<typename T>
 int Circular_List<T> :: merge(const Circular_List & a) {
     cout << "Circular list, merging list: ";
     a.dump();
@@ -161,6 +177,33 @@ int Circular_List<T> :: reverse_order() {
     return 0;
 }
 
+template<typename T>
+void Circular_List<T> :: show_middle_node() const {
+    cout << "Circular list, middle node: ";
+    if(head->next == head) {
+        cout << "NULL" << endl;
+        return;
+    }
+
+    if(head->next->next == head) {
+        cout << head->next->data << endl;
+        return;
+    } 
+
+    Node *p = head->next;
+    Node *q = head->next->next; 
+    while(q != head && q->next != head) {
+        p = p->next;
+        q = q->next->next;
+    }
+    if(q == head) {   //此处，如果在大脑中不好想明白，在纸上画个图就清楚了
+        cout << p->data << endl;
+    } else {
+        cout << p->data << " "<< p->next->data << endl;
+    }
+
+    return;
+}
 
 template<typename T>
 void Circular_List<T> :: dump() const {

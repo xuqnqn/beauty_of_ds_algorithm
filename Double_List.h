@@ -33,6 +33,8 @@ class Double_List {
         int remove(const T& a);
         int merge(const Double_List & a);
         int reverse_order();
+        void clear();
+        void show_middle_node() const;
         void dump() const;
 
     private:
@@ -130,6 +132,20 @@ int Double_List<T> :: remove(const T& a) {
 }
 
 template<typename T>
+void Double_List<T> :: clear() {
+    cout << "Double list, clearing" << endl;
+    Node *p = head->next;
+    head->next = nullptr;
+    while(p) {
+        Node *q = p->next;
+        delete p;
+        p = q;
+    }
+
+    return;
+}
+
+template<typename T>
 int Double_List<T> :: merge(const Double_List & a) {
     cout << "Double list, merging list: ";
     a.dump();
@@ -180,6 +196,34 @@ int Double_List<T> :: reverse_order() {
 
     cout << "Double list, list order is reversed" << endl;
     return 0;
+}
+
+template<typename T>
+void Double_List<T> :: show_middle_node() const {
+    cout << "Double list, middle node: ";
+    if(!head->next) {
+        cout << "NULL" << endl;
+        return;
+    }
+
+    if(!head->next->next) {
+        cout << head->next->data << endl;
+        return;
+    } 
+
+    Node *p = head->next;
+    Node *q = head->next->next; 
+    while(q && q->next) {
+        p = p->next;
+        q = q->next->next;
+    }
+    if(!q) {   //此处，如果在大脑中不好想明白，在纸上画个图就清楚了
+        cout << p->data << endl;
+    } else {
+        cout << p->data << " "<< p->next->data << endl;
+    }
+
+    return;
 }
 
 template<typename T>
