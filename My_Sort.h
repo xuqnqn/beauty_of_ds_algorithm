@@ -69,14 +69,17 @@ double My_Sort<T> :: select_sort() {
 template <typename T>
 double My_Sort<T> :: bubble_sort() {
     TIC;
-    for(int i = _d.size() - 1; i >= 0; i--) {
+    for(int i = _d.size() - 1; i > 0; i--) {
+        bool isSwapped = false;
         for(int j = 0; j < i; j++) {
             if(_d[j] > _d[j + 1]) {  //此处没有=号保证排序是稳定的
                 T tmp = _d[j + 1];
                 _d[j + 1] = _d[j];
                 _d[j] = tmp;
+                isSwapped = true;
             }
         }
+        if(!isSwapped) break;   //这个优化说明在一次冒泡遍历过程中，没有swap，说明都是有序的了，可以提前退出循环比较
     }
     TOC;
 }
@@ -91,7 +94,7 @@ double My_Sort<T> :: insert_sort() {
             if(_d[j] > tmp) {  //此处没有=号保证排序是稳定的
                 _d[j + 1] = _d[j];
             } else {
-                break;
+                break;      //这个优化可以提前退出循环比较
             }
         }
         _d[j + 1] = tmp;
