@@ -48,6 +48,10 @@ class My_Sort {
         double quick_sort(); 
 
     private:
+        void mergeTwoPart(vector<T> & a, unsigned int p, unsigned int r, unsigned int q);
+        void merge(vector<T> & a, unsigned int p, unsigned int q);
+
+    private:
         vector<T> & _d;     //dataArray;
 };
 
@@ -103,9 +107,57 @@ double My_Sort<T> :: insert_sort() {
 }
 
 template <typename T>
+void My_Sort<T> :: mergeTwoPart(vector<T> & a, unsigned int p, unsigned int r, unsigned int q) {
+    vector<T> t;
+    unsigned int i = p;
+    unsigned int j = r + 1;
+
+    while(i <= r && j <= q) {
+        if(a[i] <= a[j]) {
+            t.push_back(a[i]);
+            i++;
+        } else {
+            t.push_back(a[j]);
+            j++;
+        }
+    }
+
+    while(i <= r) {
+        t.push_back(a[i]);
+        i++;
+    }
+
+    while(j <= q) {
+        t.push_back(a[j]);
+        j++;
+    }
+
+    for(i = 0; i < t.size(); i++) {
+        a[p + i] = t[i];
+    }
+
+    return; 
+}
+
+
+template <typename T>
+void My_Sort<T> :: merge(vector<T> & a, unsigned int p, unsigned int q) {
+    if(p >= q) return;
+    unsigned int r = (p + q) / 2;
+
+    merge(a, p, r);
+    merge(a, r + 1, q);
+    mergeTwoPart(a, p, r, q); // merge a[p, r] with a[r+1, q]
+
+    return;
+}
+
+
+template <typename T>
 double My_Sort<T> :: merge_sort() {
     TIC;
 
+    merge(_d, 0, _d.size() - 1);
     TOC;
 }
 
