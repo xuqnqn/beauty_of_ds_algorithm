@@ -48,8 +48,10 @@ class My_Sort {
         double quick_sort(); 
 
     private:
-        void mergeTwoPart(vector<T> & a, unsigned int p, unsigned int r, unsigned int q);
-        void merge(vector<T> & a, unsigned int p, unsigned int q);
+        void mergeTwoPart(vector<T> & a, int p, int r, int q);
+        void merge(vector<T> & a, int p, int q);
+        void qksort(vector<T> & a, int p, int q);
+        int partition(vector<T> & a, int p, int q);
 
     private:
         vector<T> & _d;     //dataArray;
@@ -107,10 +109,10 @@ double My_Sort<T> :: insert_sort() {
 }
 
 template <typename T>
-void My_Sort<T> :: mergeTwoPart(vector<T> & a, unsigned int p, unsigned int r, unsigned int q) {
+void My_Sort<T> :: mergeTwoPart(vector<T> & a, int p, int r, int q) {
     vector<T> t;
-    unsigned int i = p;
-    unsigned int j = r + 1;
+    int i = p;
+    int j = r + 1;
 
     while(i <= r && j <= q) {
         if(a[i] <= a[j]) {
@@ -141,9 +143,9 @@ void My_Sort<T> :: mergeTwoPart(vector<T> & a, unsigned int p, unsigned int r, u
 
 
 template <typename T>
-void My_Sort<T> :: merge(vector<T> & a, unsigned int p, unsigned int q) {
+void My_Sort<T> :: merge(vector<T> & a, int p, int q) {
     if(p >= q) return;
-    unsigned int r = (p + q) / 2;
+    int r = (p + q) / 2;
 
     merge(a, p, r);
     merge(a, r + 1, q);
@@ -162,9 +164,41 @@ double My_Sort<T> :: merge_sort() {
 }
 
 template <typename T>
+int My_Sort<T> :: partition(vector<T> & a, int p, int q) {
+    T pivot = a[q];
+    int j = p;
+    for(int i = j; i < q; i++) {    //注意： i = j
+        if(a[i] < pivot) {
+            T tmp = a[j];//这里可以再加个判断避免一下不必要的自赋值
+            a[j] = a[i];
+            a[i] = tmp;
+            j++;
+        }
+    }
+    T tmp = a[j];
+    a[j] = a[q];
+    a[q] = tmp;
+
+    return j;
+}
+
+template <typename T>
+void My_Sort<T> :: qksort(vector<T> & a, int p, int q) {
+    if(p >= q) return;
+
+    int i = 0;
+
+    i = partition(a, p, q);
+    qksort(a, p, i - 1);
+    qksort(a, i + 1, q);
+
+    return;
+}
+
+template <typename T>
 double My_Sort<T> :: quick_sort() {
     TIC;
-
+    qksort(_d, 0, _d.size() - 1);
     TOC;
 }
 
