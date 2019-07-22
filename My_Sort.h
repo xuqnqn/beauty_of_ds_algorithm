@@ -10,6 +10,7 @@
 
 #include <sys/time.h>
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -46,12 +47,14 @@ class My_Sort {
         double insert_sort();
         double merge_sort(); 
         double quick_sort(); 
+        double bulk_sort(); 
 
     private:
+        void dump_data(const vector<T> &a);
         void mergeTwoPart(vector<T> & a, int p, int r, int q);
         void merge(vector<T> & a, int p, int q);
         void qksort(vector<T> & a, int p, int q);
-        int partition(vector<T> & a, int p, int q);
+        int  partition(vector<T> & a, int p, int q);
 
     private:
         vector<T> & _d;     //dataArray;
@@ -199,6 +202,68 @@ template <typename T>
 double My_Sort<T> :: quick_sort() {
     TIC;
     qksort(_d, 0, _d.size() - 1);
+    TOC;
+}
+
+template <typename T>
+void My_Sort<T> :: dump_data(const vector<T> &a) {
+    unsigned int i = 0;
+    for(auto it = a.begin(); it != a.end(); it++) {
+        if(!(i++ % 16) && (i-1)) cout << endl;
+        printf("%6d ", *it);
+        //cout << *it << " ";
+    }
+    cout << endl;
+    cout << "total data num: " << a.size() << endl;
+}
+
+
+template <typename T>
+double My_Sort<T> :: bulk_sort() {
+    TIC;
+    T max = _d[0];
+    T min = _d[0];
+    for(int i = 0; i < _d.size(); i++) { //找到最大值和最小值，获取数据 “范围”
+        if(max < _d[i]) max = _d[i];
+        if(min > _d[i]) min = _d[i];
+    }
+    
+    const int bulk_cnt = 10; //10 + 1个桶
+    T range = max - min;
+    T interval = range / bulk_cnt;
+
+    vector<vector<T>> bulk;
+    for(int i = 0; i <= bulk_cnt; i++) { //i <= bulk_cnt， 注意这个=号，这是个坑
+        bulk.push_back(vector<T>());     //注意嵌套vector的使用方法，要先push
+    }
+
+    for(int i = 0; i < _d.size(); i++) { 
+        for(int j = 0; j <= bulk_cnt; j++) {
+            if(j == (_d[i] - min) / interval) { //可以用gdb条件断点在此次调试, ie: b 242 if _d[i] == 45397
+                bulk[j].push_back(_d[i]);
+                break;
+            }
+        }
+    }
+
+    for(int i = 0; i <= bulk_cnt; i++) { 
+        qksort(bulk[i], 0, bulk[i].size() - 1); //桶排序，在桶内部调用快速排序
+    }
+
+#if 0 
+    cout << "dumping out bulk:" << endl;
+    for(int i = 0; i <= bulk_cnt; i++) { 
+        dump_data(bulk[i]);
+    }
+#endif
+
+    int k = 0;
+    for(int i = 0; i <= bulk_cnt; i++) { 
+        for(int j = 0; j < bulk[i].size(); j++) {
+            _d[k++] = bulk[i][j];
+        }
+    }
+
     TOC;
 }
 

@@ -44,6 +44,7 @@ int main(int argc, char **argv, char **env)
     vector<unsigned int> vi(vs);
     vector<unsigned int> vm(vs);
     vector<unsigned int> vq(vs);
+    vector<unsigned int> vbulk(vs);
 
     double elapsed_time = 0;
     cout << "\nbefore sort, dump data \'vs\':" << endl;
@@ -81,6 +82,14 @@ int main(int argc, char **argv, char **env)
     cout << "\nafter sort, dump data \'vq\':" << endl;
     dump_data(vq);
     cout << "sort \'vq\' used time: " << elapsed_time << "(ms)" << endl;
+
+    cout << "\nbefore sort, dump data \'vbulk\':" << endl;
+    dump_data(vbulk);
+    elapsed_time = My_Sort<unsigned int>(vbulk).bulk_sort();
+    cout << "\nafter sort, dump data \'vbulk\':" << endl;
+    dump_data(vbulk);
+    cout << "sort \'vbulk\' used time: " << elapsed_time << "(ms)" << endl;
+
 
 
     return 0;
