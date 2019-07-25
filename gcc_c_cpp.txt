@@ -1,0 +1,47 @@
+
+xuqnqn@xuqnqn-VirtualBox:~/b$ gcc a.c -o a.cout
+xuqnqn@xuqnqn-VirtualBox:~/b$ gcc a.cpp -o a.cppout
+xuqnqn@xuqnqn-VirtualBox:~/b$ ./a.cout 
+hello world
+xuqnqn@xuqnqn-VirtualBox:~/b$ ./a.cppout 
+hello world
+xuqnqn@xuqnqn-VirtualBox:~/b$ nm ./a.cout | grep func1
+000000000000063a T func1
+xuqnqn@xuqnqn-VirtualBox:~/b$ nm ./a.cppout | grep func1
+000000000000063a T _Z5func1v
+xuqnqn@xuqnqn-VirtualBox:~/b$ cat a.c
+#include "stdio.h"
+
+int func1() {
+    printf("hello world\n");
+    return 0;
+}
+
+int main()
+{
+    func1();
+    return 0;
+}
+xuqnqn@xuqnqn-VirtualBox:~/b$ cat a.cpp
+#include "stdio.h"
+
+int func1() {
+    printf("hello world\n");
+    return 0;
+}
+
+int main()
+{
+    func1();
+    return 0;
+}
+xuqnqn@xuqnqn-VirtualBox:~/b$ 
+xuqnqn@xuqnqn-VirtualBox:~/b$ g++ a.c -o aa.cout
+xuqnqn@xuqnqn-VirtualBox:~/b$ g++ a.cpp -o aa.cppout
+xuqnqn@xuqnqn-VirtualBox:~/b$ nm ./aa.cout | grep func1
+000000000000063a T _Z5func1v
+xuqnqn@xuqnqn-VirtualBox:~/b$ nm ./aa.cppout | grep func1
+000000000000063a T _Z5func1v
+xuqnqn@xuqnqn-VirtualBox:~/b$ 
+
+
